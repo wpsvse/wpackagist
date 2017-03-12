@@ -1,5 +1,5 @@
 body {
-    border-top: 5px solid #E14C41;
+    border-top: 5px solid #21759b;
 }
 
 h1, h2, h3, h4 {
@@ -8,12 +8,12 @@ h1, h2, h3, h4 {
 }
 
 a {
-    color: #E14C41;
+    color: #21759b;
     text-decoration: none;
 }
 
 a:hover {
-    color: #E14C41;
+    color: #21759b;
     text-decoration: underline;
 }
 
@@ -46,18 +46,26 @@ ol {
 }
 
 blockquote, pre {
-    border-left: 3px solid #E14C41;
+    border-left: 3px solid #21759b;
     padding: 10px 20px 10px 17px;
     margin-bottom: 7px;
     background-color: #f2f2f2;
 }
 
-#title, .mission {
-    margin: 3rem 0;
+#title  {
+    margin: 2rem 0;
+}
+
+.mission {
+    margin: 1.5rem 0;
 }
 
 .mission {
     font-size: 1.125rem;
+}
+
+blockquote.migrate {
+    margin-bottom: 2rem !important;
 }
 
 .highlighter {
@@ -66,8 +74,8 @@ blockquote, pre {
 }
 
 .primary-color {
-    background-color: #E14C41;
-    border-color: #ce2d21;
+    background-color: #21759b;
+    border-color: #21759b;
 }
 
 .label:hover, .label:focus {
@@ -76,7 +84,7 @@ blockquote, pre {
 }
 
 button:hover, button:focus, .button:hover, .button:focus {
-    background-color: #ce2d21;
+    background-color: #21759b;
     text-decoration: none;
 }
 
