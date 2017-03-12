@@ -79,7 +79,7 @@ $searchForm = $app['form.factory']->createNamedBuilder('', 'form', null, array('
 // Home
 $app->get('/', function (Request $request) use ($app, $searchForm) {
     return $app['twig']->render('index.twig', array(
-       'title'      => "WordPress Packagist: Manage your plugins and themes with Composer",
+       'title'      => "WordPress Packagist by WordPress Sverige - Manage your plugins and themes with Composer",
        'searchForm' => $searchForm->handleRequest($request)->createView(),
     ));
 });
