@@ -61,3 +61,11 @@ The first database fetch may easily take 30-60 minutes, be patient.
 1. `bin/cmd refresh`: Refresh the list of plugins and themes to find new and updated packages.
 2. `bin/cmd update`: Update the versions for packages identified in `1.`.
 3. `bin/cmd build`: Rebuild all `.json` files in `web/`.
+
+### CRON job
+
+The CRON job runs the three commands above. We recommend fetching new packages every 30 minutes. Add this to your crontab to set that up:
+
+```
+0,30 * * * * cd /var/www/your-wpackagist-location && ./run-cron.sh >> /var/log/wpackagist-update.log
+```
