@@ -1,11 +1,13 @@
-WordPress Packagist
+WordPress Packagist by WordPress Sweden
 ===
 
-This is the repository for [wpackagist.org](https://wpackagist.org) which allows WordPress plugins and themes to be
+> This is a fork of [WPackagist.org](https://github.com/outlandishideas/wpackagist) that aims to provide an up-to-date and highly available alternative and to contribute patches upstream. Feel free to use our repository by changing your repository URL in `composer.json` to https://wpackagist.wpsv.se/
+
+This is the repository for [wpackagist.wpsv.se](https://wpackagist.wpsv.se/) which allows WordPress plugins and themes to be
 managed along with other dependencies using [Composer](https://getcomposer.org).
 
-More info and usage instructions at [wpackagist.org](https://wpackagist.org) or follow us on
-Twitter [@wpackagist](https://twitter.com/wpackagist).
+More info and usage instructions at [wpackagist.wpsv.se](https://wpackagist.wpsv.se/) or follow us on
+Twitter [@WPSverige](https://twitter.com/wpackagist).
 
 For support and discussion, please use the issue tracker above.
 
@@ -20,7 +22,7 @@ Example composer.json:
     "repositories":[
         {
             "type":"composer",
-            "url":"https://wpackagist.org"
+            "url":"https://wpackagist.wpsv.se/"
         }
     ],
     "require": {
