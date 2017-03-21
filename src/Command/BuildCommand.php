@@ -76,7 +76,6 @@ class BuildCommand extends Command
         $providers = array();
 
         foreach ($packages as $package) {
-            $packageName = $package->getPackageName();
             $packagesData = $package->getPackages($uid);
 
             foreach ($packagesData as $packageName => $packageData) {
