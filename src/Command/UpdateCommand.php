@@ -19,6 +19,13 @@ class UpdateCommand extends Command
             ->setName('update')
             ->setDescription('Update version info for individual plugins')
             ->addOption(
+                'name',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Name of package to update',
+                null
+            )
+            ->addOption(
                 'concurrent',
                 null,
                 InputOption::VALUE_REQUIRED,
@@ -51,19 +58,32 @@ class UpdateCommand extends Command
         $db = $this->getApplication()->getSilexApplication()['db'];
 
         $update = $db->prepare(
-            'UPDATE packages SET last_fetched = datetime("now"), versions = :json, is_active = 1
+            'UPDATE packages SET 
+            last_fetched = datetime("now"), versions = :json, is_active = 1, display_name = :display_name
             WHERE class_name = :class_name AND name = :name'
         );
         $deactivate = $db->prepare('UPDATE packages SET last_fetched = datetime("now"), is_active = 0 WHERE class_name = :class_name AND name = :name');
 
+        $name = $input->getOption('name');
+
+        if ($name) {
+            $query = $db->prepare('
+                SELECT * FROM packages
+                WHERE name = :name
+            ');
+            $query->bindValue("name", $name);
+        } else {
+            $query = $db->prepare('
+                SELECT * FROM packages
+                WHERE last_fetched IS NULL
+                OR last_fetched < datetime(last_committed, "+2 hours")
+                OR (is_active = 0 AND last_committed > date("now", "-90 days") AND last_fetched < datetime("now", "-7 days"))
+            ');
+        }
         // get packages that have never been fetched or have been updated since last being fetched
         // or that are inactive but have been updated in the past 90 days and haven't been fetched in the past 7 days
-        $packages = $db->query('
-            SELECT * FROM packages
-            WHERE last_fetched IS NULL
-            OR last_fetched < datetime(last_committed, "+2 hours")
-            OR (is_active = 0 AND last_committed > date("now", "-90 days") AND last_fetched < datetime("now", "-7 days"))
-        ')->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_CLASSTYPE);
+        $query->execute();
+        $packages = $query->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_CLASSTYPE);
 
         $count = count($packages);
         $versionParser = new VersionParser();
@@ -74,13 +94,14 @@ class UpdateCommand extends Command
         foreach ($packages as $index => $package) {
 
             $percent = $index / $count * 100;
-            $output->writeln(sprintf("<info>%04.1f%%</info> Fetched %s", $percent, $package->getName()));
 
             if ($package instanceof Plugin) {
                 $info = $wporgClient->getPlugin($package->getName(), ['versions']);
             } else {
                 $info = $wporgClient->getTheme($package->getName(), ['versions']);
             }
+
+            $output->writeln(sprintf("<info>%04.1f%%</info> Fetched %s", $percent, $package->getName()));
 
             if (!$info) {
                 // Plugin is not active
@@ -128,6 +149,7 @@ class UpdateCommand extends Command
             if ($versions) {
                 $update->execute(
                     array(
+                        ':display_name' => $info['name'],
                         ':class_name' => get_class($package),
                         ':name' => $package->getName(),
                         ':json' => json_encode($versions)
